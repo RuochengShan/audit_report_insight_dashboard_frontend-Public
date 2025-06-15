@@ -13,7 +13,7 @@ export const mockReportData: ReportItemType[] = [
   {
     id: 'chap1',
     type: 'chapter',
-    title: 'Chapter 1: Introduction',
+    title: 'The Audit in a Snapshot',
     contentSummary: 'Overview of the audit scope and objectives. This chapter sets the stage for the entire audit, outlining the purpose, scope, and methodology used.',
     completeness: 75,
     missingTopics: ['Detailed risk assessment methodology', 'List of key stakeholders and interviewees', 'Timeline of audit activities'],
@@ -22,7 +22,7 @@ export const mockReportData: ReportItemType[] = [
       {
         id: 'sec1.1',
         type: 'section',
-        title: 'Section 1.1: Audit Scope',
+        title: 'Why',
         contentSummary: 'Defines the boundaries of the audit, including systems, processes, and locations covered.',
         completeness: 90,
         missingTopics: ['Specific exclusions clearly stated', 'Rationale for scope limitations'],
@@ -31,8 +31,17 @@ export const mockReportData: ReportItemType[] = [
       {
         id: 'sec1.2',
         type: 'section',
-        title: 'Section 1.2: Audit Objectives',
+        title: 'What',
         contentSummary: 'Lists the key objectives this audit aims to achieve, ensuring clarity and focus.',
+        completeness: 60,
+        missingTopics: ['Measurable success criteria for each objective', 'Alignment with COBIT framework', 'Link to overall business strategy'],
+        relevantDocuments: ['ProjectPlan_v1.2.mpp', 'ObjectivesMatrix.xlsx'],
+      },
+      {
+        id: 'sec1.3',
+        type: 'section',
+        title: 'Conclusion',
+        contentSummary: 'Conclusion on the objectives',
         completeness: 60,
         missingTopics: ['Measurable success criteria for each objective', 'Alignment with COBIT framework', 'Link to overall business strategy'],
         relevantDocuments: ['ProjectPlan_v1.2.mpp', 'ObjectivesMatrix.xlsx'],
@@ -42,7 +51,7 @@ export const mockReportData: ReportItemType[] = [
   {
     id: 'chap2',
     type: 'chapter',
-    title: 'Chapter 2: Findings and Observations',
+    title: 'I. Objectives and Scope',
     contentSummary: 'Detailed description of audit findings, categorized by risk level and impact.',
     completeness: 40,
     missingTopics: ['Root cause analysis for each finding', 'Quantitative impact assessment', 'Positive observations or commendations'],
@@ -71,11 +80,22 @@ export const mockReportData: ReportItemType[] = [
   {
     id: 'chap3',
     type: 'chapter',
-    title: 'Chapter 3: Recommendations',
+    title: 'II. Background',
     contentSummary: 'Actionable recommendations to address identified findings and improve controls.',
     completeness: 85,
     missingTopics: ['Prioritization of recommendations based on effort/impact', 'Suggested owners for each recommendation'],
     relevantDocuments: ['Recommendation_Tracker.xlsx', 'Best_Practices_Guide.pdf'],
+    subItems: [
+      {
+        id: 'sec3.2',
+        type: 'section',
+        title: 'xxxx',
+        contentSummary: 'Related to the subheading under reivew',
+        completeness: 30,
+        missingTopics: ['Potential cascading effects', 'Historical trend analysis if applicable'],
+        relevantDocuments: ['ControlGapAnalysis.pdf'],
+      }
+    ]
   },
 ];
 
