@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'AuditWise Dashboard',
+  title: 'Audit Report Insight Dashboard',
   description: 'Audit Report Insight Dashboard',
 };
 
