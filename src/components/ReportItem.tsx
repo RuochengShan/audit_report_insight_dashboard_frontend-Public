@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -26,12 +27,17 @@ const ReportItem: React.FC<ReportItemProps> = ({ item, onItemClick, selectedItem
   const IconComponent = item.type === 'chapter' ? Folder : FileText;
 
   let progressBarColorClass = '';
+  let textColorClass = '';
+
   if (item.completeness < 40) {
     progressBarColorClass = 'bg-red-500';
+    textColorClass = 'text-red-500';
   } else if (item.completeness <= 90) {
     progressBarColorClass = 'bg-yellow-500';
+    textColorClass = 'text-yellow-500';
   } else {
     progressBarColorClass = 'bg-green-500';
+    textColorClass = 'text-green-500';
   }
 
   return (
@@ -62,7 +68,10 @@ const ReportItem: React.FC<ReportItemProps> = ({ item, onItemClick, selectedItem
               <IconComponent className={cn("h-5 w-5 mr-2", item.type === 'chapter' ? 'text-primary' : 'text-secondary-foreground')} />
               <CardTitle className="font-headline text-lg">{item.title}</CardTitle>
             </div>
-            <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
+            <span className={cn(
+                "text-xs font-medium whitespace-nowrap",
+                textColorClass || "text-muted-foreground"
+              )}>
               {item.completeness}% complete
             </span>
           </div>
