@@ -32,7 +32,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ item, onItemClick, selectedItem
   if (item.completeness < 40) {
     progressBarColorClass = 'bg-red-500';
     textColorClass = 'text-red-500';
-  } else if (item.completeness <= 90) {
+  } else if (item.completeness < 85) {
     progressBarColorClass = 'bg-yellow-500';
     textColorClass = 'text-yellow-500';
   } else {
