@@ -25,19 +25,22 @@ const ReportItem: React.FC<ReportItemProps> = ({ item, onItemClick, selectedItem
 
   const hasSubItems = item.subItems && item.subItems.length > 0;
   const IconComponent = item.type === 'chapter' ? Folder : FileText;
+  const hasCompleteness = typeof item.completeness === 'number';
 
   let progressBarColorClass = '';
   let textColorClass = '';
 
-  if (item.completeness < 40) {
-    progressBarColorClass = 'bg-red-500';
-    textColorClass = 'text-red-500';
-  } else if (item.completeness < 85) {
-    progressBarColorClass = 'bg-yellow-500';
-    textColorClass = 'text-yellow-500';
-  } else {
-    progressBarColorClass = 'bg-green-500';
-    textColorClass = 'text-green-500';
+  if (hasCompleteness) {
+    if (item.completeness! < 40) {
+      progressBarColorClass = 'bg-red-500';
+      textColorClass = 'text-red-500';
+    } else if (item.completeness! < 85) {
+      progressBarColorClass = 'bg-yellow-500';
+      textColorClass = 'text-yellow-500';
+    } else {
+      progressBarColorClass = 'bg-green-500';
+      textColorClass = 'text-green-500';
+    }
   }
 
   return (
@@ -68,23 +71,27 @@ const ReportItem: React.FC<ReportItemProps> = ({ item, onItemClick, selectedItem
               <IconComponent className={cn("h-5 w-5 mr-2", item.type === 'chapter' ? 'text-primary' : 'text-secondary-foreground')} />
               <CardTitle className="font-headline text-lg">{item.title}</CardTitle>
             </div>
-            <span className={cn(
-                "text-xs font-medium whitespace-nowrap",
-                textColorClass || "text-muted-foreground"
-              )}>
-              {item.completeness}% complete
-            </span>
+            {hasCompleteness && (
+              <span className={cn(
+                  "text-xs font-medium whitespace-nowrap",
+                  textColorClass || "text-muted-foreground"
+                )}>
+                {item.completeness}% complete
+              </span>
+            )}
           </div>
         </CardHeader>
         { (isExpanded || level === 0) && ( // Show content for expanded items or top-level items
           <CardContent className="px-4 pb-3 pt-0">
-            <p className={cn("text-sm text-muted-foreground truncate", !hasSubItems && "mb-2")}>{item.contentSummary}</p>
-            <Progress
-              value={item.completeness}
-              aria-label={`Completeness: ${item.completeness}%`}
-              className="h-2 mt-1"
-              indicatorClassName={progressBarColorClass}
-            />
+            <p className={cn("text-sm text-muted-foreground", !hasSubItems && "mb-2")}>{item.contentSummary}</p>
+            {hasCompleteness && (
+              <Progress
+                value={item.completeness}
+                aria-label={`Completeness: ${item.completeness}%`}
+                className="h-2 mt-1"
+                indicatorClassName={progressBarColorClass}
+              />
+            )}
           </CardContent>
         )}
       </Card>
