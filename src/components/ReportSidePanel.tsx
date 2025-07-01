@@ -10,6 +10,7 @@ import AiInsightGenerator from '@/components/AiInsightGenerator';
 import { Badge } from '@/components/ui/badge';
 import { ListChecks, Paperclip, FileText, X } from 'lucide-react';
 import { AcronymsTable } from './AcronymsTable';
+import { DistributionList } from './DistributionList';
 
 interface ReportSidePanelProps {
   isOpen: boolean;
@@ -52,6 +53,8 @@ const ReportSidePanel: React.FC<ReportSidePanelProps> = ({ isOpen, onOpenChange,
         <ScrollArea className="flex-grow p-6">
           {selectedItem.specialDisplay === 'acronyms' ? (
             <AcronymsTable />
+          ) : selectedItem.specialDisplay === 'distributionList' ? (
+            <DistributionList to={selectedItem.distributionTo || []} cc={selectedItem.distributionCc || []} />
           ) : (
             <div className="space-y-6">
               <div>

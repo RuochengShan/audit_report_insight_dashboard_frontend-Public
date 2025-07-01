@@ -7,7 +7,9 @@ export interface ReportItemType {
   missingTopics?: string[];
   relevantDocuments?: string[];
   subItems?: ReportItemType[];
-  specialDisplay?: 'acronyms';
+  specialDisplay?: 'acronyms' | 'distributionList';
+  distributionTo?: { name: string; email: string }[];
+  distributionCc?: { name: string; email: string }[];
 }
 
 export const mockAcronyms = [
@@ -172,6 +174,17 @@ export const mockReportData: ReportItemType[] = [
     type: 'chapter',
     title: 'Distribution List',
     contentSummary: 'This report is intended for the following stakeholders.',
+    specialDisplay: 'distributionList',
+    distributionTo: [
+      { name: 'Alice Johnson', email: 'alice.j@example.com' },
+      { name: 'Bob Williams', email: 'bob.w@example.com' },
+      { name: 'Project Lead', email: 'lead@example.com' },
+    ],
+    distributionCc: [
+      { name: 'Charlie Brown', email: 'charlie.b@example.com' },
+      { name: 'Diana Prince', email: 'diana.p@example.com' },
+      { name: 'External Auditor', email: 'auditor@example.com' },
+    ],
   },
 ];
 
