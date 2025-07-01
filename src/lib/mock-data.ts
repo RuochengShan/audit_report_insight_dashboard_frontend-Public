@@ -1,3 +1,9 @@
+export interface EvidenceItem {
+  title: string;
+  content: string;
+  pageNumber: number;
+}
+
 export interface ReportItemType {
   id: string;
   type: 'chapter' | 'section';
@@ -7,6 +13,7 @@ export interface ReportItemType {
   completeness?: number; // 0-100
   missingTopics?: string[];
   relevantDocuments?: string[];
+  evidence?: EvidenceItem[];
   subItems?: ReportItemType[];
   specialDisplay?: 'acronyms' | 'distributionList';
   distributionTo?: { name: string; email: string }[];
@@ -159,7 +166,18 @@ export const mockReportData: ReportItemType[] = [
         originalContent: `**Commendation 1: Mature Change Management Process**\nDuring our review of the change management process for the 'Phoenix' project, we tested a sample of 25 production changes made during the audit period. We found that 100% of the changes had a corresponding Jira ticket with documented business justification, technical implementation plan, testing evidence, and management approval. This demonstrates a mature and effective change control process that minimizes the risk of unauthorized or disruptive changes to the production environment.\n\n**Commendation 2: Diligent User Access Reviews**\nWe verified that user access reviews for both the 'Phoenix' and 'Griffin' systems were performed for Q1 and Q2 2024. We reviewed the evidence of these reviews and found that they were completed on time, and any identified instances of excessive access were remediated within the policy-mandated 5-day window. This control is operating effectively to enforce the principle of least privilege.`,
         completeness: 90,
         missingTopics: ['Quotes from stakeholders'],
-        relevantDocuments: ['Change_Management_Policy.pdf', 'Access_Review_Q2.xlsx'],
+        evidence: [
+          {
+            title: 'Change_Management_Policy.pdf',
+            content: 'All production changes must be documented in Jira, including business justification, technical implementation plan, testing evidence, and management approval before deployment.',
+            pageNumber: 5,
+          },
+          {
+            title: 'Access_Review_Q2.xlsx',
+            content: 'Quarterly access review for "Phoenix" and "Griffin" completed on June 28, 2024. All identified excessive permissions were remediated within 5 business days.',
+            pageNumber: 1,
+          }
+        ]
       },
       {
         id: 'sec4.2',
@@ -169,7 +187,18 @@ export const mockReportData: ReportItemType[] = [
         originalContent: `**Finding 2024-01: Inadequate Database Activity Logging (High Risk)**\n\n**Condition:** Our testing revealed that while DBA login and logout events for the 'Griffin' production database are logged, the native logging features of the database are not configured to record the specific SQL queries executed by privileged users. \n\n**Criteria:** According to the company's Data Security Standard (DSS-04), all privileged access to systems containing sensitive data must be logged in a manner that creates a detailed audit trail of all actions performed.\n\n**Cause:** The database was deployed using a default configuration template which did not include fine-grained auditing. The implementation team was not aware of the requirements in DSS-04.\n\n**Impact:** Without a detailed log of executed queries, the company cannot perform effective monitoring for unauthorized data access or modification. In the event of a data breach, it would be difficult or impossible to determine what data was accessed or exfiltrated by a malicious actor or a compromised insider account.\n\n**Recommendation:** Implement a Database Activity Monitoring (DAM) tool or enable advanced native auditing features to capture and retain all SQL queries run by privileged users on the 'Griffin' production database.\n\n**Management Action Plan (MAP):**\n- **Action:** The Infrastructure team will research, procure, and deploy a DAM solution for the 'Griffin' database.\n- **Responsible Party:** Chief Information Security Officer (CISO).\n- **Target Completion Date:** October 31, 2024.`,
         completeness: 25,
         missingTopics: ['Risk rating (High/Medium/Low)', 'Financial impact estimate'],
-        relevantDocuments: ['DBA_Access_Logs_Excerpt.log', 'Incident_Response_Plan.pdf'],
+        evidence: [
+            {
+                title: 'DBA_Access_Logs_Excerpt.log',
+                content: '`[2024-06-15 14:32:01] user=\'dba_admin\' db=\'griffin_prod\' host=\'10.1.1.5\' --- LOG: connection authorized`',
+                pageNumber: 152,
+            },
+            {
+                title: 'Data Security Standard DSS-04',
+                content: 'Section 3.1.2: All privileged access to databases containing sensitive customer data (Level 3 and above) must have detailed query logging enabled. Logs must be retained for a minimum of 365 days in a secure, tamper-evident repository.',
+                pageNumber: 3,
+            }
+        ]
       },
     ]
   },

@@ -113,6 +113,33 @@ const ReportSidePanel: React.FC<ReportSidePanelProps> = ({ isOpen, onOpenChange,
                 </>
               )}
 
+              {selectedItem.evidence && selectedItem.evidence.length > 0 && (
+                <>
+                  <Separator />
+                  <div>
+                    <h3 className="font-semibold font-headline text-lg mb-3 flex items-center">
+                      <Paperclip className="mr-2 h-5 w-5 text-primary" />
+                      Evidence
+                    </h3>
+                    <ul className="space-y-4">
+                      {selectedItem.evidence.map((item, index) => (
+                        <li key={index} className="p-3 rounded-md border bg-muted/30">
+                          <div className="font-semibold text-sm flex items-center mb-2">
+                            <FileText className="mr-2 h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span>{item.title}</span>
+                          </div>
+                          <blockquote className="border-l-2 border-primary/50 pl-3 text-sm text-muted-foreground italic">
+                            "{item.content}"
+                          </blockquote>
+                          <p className="text-xs text-muted-foreground text-right mt-2">
+                            Page: {item.pageNumber}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
 
               {selectedItem.relevantDocuments && selectedItem.relevantDocuments.length > 0 && (
                 <>
