@@ -8,9 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import type { ReportItemType } from '@/lib/mock-data';
 import AiInsightGenerator from '@/components/AiInsightGenerator';
 import { Badge } from '@/components/ui/badge';
-import { ListChecks, Paperclip, FileText, X } from 'lucide-react';
+import { BookText, ListChecks, Paperclip, FileText, X } from 'lucide-react';
 import { AcronymsTable } from './AcronymsTable';
 import { DistributionList } from './DistributionList';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 
 interface ReportSidePanelProps {
   isOpen: boolean;
@@ -27,7 +28,7 @@ const ReportSidePanel: React.FC<ReportSidePanelProps> = ({ isOpen, onOpenChange,
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-lg p-0 flex flex-col" aria-labelledby="side-panel-title">
+      <SheetContent className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-[50vw] p-0 flex flex-col" aria-labelledby="side-panel-title">
         <SheetHeader className="p-6 pb-2 border-b">
           <div className="flex justify-between items-start">
             <div>
@@ -66,6 +67,27 @@ const ReportSidePanel: React.FC<ReportSidePanelProps> = ({ isOpen, onOpenChange,
                   {selectedItem.contentSummary}
                 </p>
               </div>
+
+              {selectedItem.originalContent && (
+                <>
+                  <Separator />
+                   <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="item-1" className="border-b-0">
+                      <AccordionTrigger className="hover:no-underline py-2">
+                        <h3 className="font-semibold font-headline text-lg flex items-center">
+                          <BookText className="mr-2 h-5 w-5 text-primary" />
+                          Original Content
+                        </h3>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="text-sm text-muted-foreground leading-relaxed bg-muted/30 p-4 rounded-md whitespace-pre-wrap">
+                          {selectedItem.originalContent}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </>
+              )}
 
               {selectedItem.missingTopics && selectedItem.missingTopics.length > 0 && (
                 <>
