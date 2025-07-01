@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import type { ReportItemType } from '@/lib/mock-data';
 import AiInsightGenerator from '@/components/AiInsightGenerator';
 import { Badge } from '@/components/ui/badge';
-import { BookText, ListChecks, Paperclip, FileText, X } from 'lucide-react';
+import { BookText, ListChecks, Paperclip, FileText, X, History, CalendarDays } from 'lucide-react';
 import { AcronymsTable } from './AcronymsTable';
 import { DistributionList } from './DistributionList';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
@@ -86,6 +86,31 @@ const ReportSidePanel: React.FC<ReportSidePanelProps> = ({ isOpen, onOpenChange,
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
+                </>
+              )}
+
+              {selectedItem.auditHistory && selectedItem.auditHistory.length > 0 && (
+                <>
+                  <Separator />
+                  <div>
+                    <h3 className="font-semibold font-headline text-lg mb-3 flex items-center">
+                      <History className="mr-2 h-5 w-5 text-primary" />
+                      Relevant Audit History
+                    </h3>
+                    <ul className="space-y-4">
+                      {selectedItem.auditHistory.map((item, index) => (
+                        <li key={index} className="p-3 rounded-md border bg-muted/30">
+                          <div className="font-semibold text-sm flex items-center mb-2">
+                            <CalendarDays className="mr-2 h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span>{item.date} - {item.auditName}</span>
+                          </div>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {item.content}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </>
               )}
 

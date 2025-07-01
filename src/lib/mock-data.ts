@@ -4,6 +4,12 @@ export interface EvidenceItem {
   pageNumber: number;
 }
 
+export interface AuditHistoryItem {
+  date: string;
+  auditName: string;
+  content: string;
+}
+
 export interface ReportItemType {
   id: string;
   type: 'chapter' | 'section';
@@ -14,6 +20,7 @@ export interface ReportItemType {
   missingTopics?: string[];
   relevantDocuments?: string[];
   evidence?: EvidenceItem[];
+  auditHistory?: AuditHistoryItem[];
   subItems?: ReportItemType[];
   specialDisplay?: 'acronyms' | 'distributionList';
   distributionTo?: { name: string; email: string }[];
@@ -131,11 +138,21 @@ export const mockReportData: ReportItemType[] = [
         id: 'sec3.2',
         type: 'section',
         title: 'Prior Audit Work',
-        contentSummary: "An internal audit of the warehouse inventory management system was conducted in Q2 2023 (Report #2023-08). That audit identified weaknesses in physical inventory counting procedures. Two of the three recommendations from that audit were implemented and closed as of March 2024. The third recommendation, related to implementing automated barcode scanning, is still in progress and tracked under issue #IA-2023-08-03.",
-        originalContent: `The last internal audit related to this area was completed on July 15, 2023, and was titled "Warehouse Inventory Management Controls Review" (Report #2023-08). That audit yielded three recommendations:\n\n1.  **2023-08-01 (Medium Risk):** Implement a formal cycle counting program. **Status: Implemented and Closed.**\n2.  **2023-08-02 (Low Risk):** Restrict access to the inventory adjustment module. **Status: Implemented and Closed.**\n3.  **2023-08-03 (Medium Risk):** Procure and implement a barcode-based system for inventory tracking. **Status: Open.** The target completion date for this item was extended to Q4 2024 due to budget reallocation. This current audit will assess any compensating controls in place due to the delay of this implementation.`,
-        completeness: 85,
-        missingTopics: ['Link to prior audit report'],
-        relevantDocuments: ['Prior_Audit_Followup.xlsx'],
+        contentSummary: "A review of past audit activities and the status of previously identified issues relevant to this engagement.",
+        completeness: 90,
+        missingTopics: [],
+        auditHistory: [
+          {
+            date: 'Q2 2023',
+            auditName: 'Warehouse Inventory Management Controls Review (Report #2023-08)',
+            content: 'Identified weaknesses in physical inventory counting procedures. Two recommendations (cycle counting, access restrictions) are closed. One recommendation (barcode scanning) is in progress and tracked as #IA-2023-08-03.',
+          },
+          {
+            date: 'Q4 2022',
+            auditName: 'Logistics Vendor Security Assessment',
+            content: 'Reviewed security controls for third-party shipping carriers. No high-risk findings were noted. A recommendation to enhance API monitoring was implemented in Q1 2023.',
+          },
+        ],
       },
       {
         id: 'sec3.3',
