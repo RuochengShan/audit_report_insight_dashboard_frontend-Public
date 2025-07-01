@@ -3,11 +3,27 @@ export interface ReportItemType {
   type: 'chapter' | 'section';
   title: string;
   contentSummary: string;
-  completeness: number; // 0-100
-  missingTopics: string[];
-  relevantDocuments: string[];
+  completeness?: number; // 0-100
+  missingTopics?: string[];
+  relevantDocuments?: string[];
   subItems?: ReportItemType[];
+  specialDisplay?: 'acronyms';
 }
+
+export const mockAcronyms = [
+  { acronym: 'AWS', definition: 'Amazon Web Services' },
+  { acronym: 'COBIT', definition: 'Control Objectives for Information and Related Technologies' },
+  { acronym: 'DAM', definition: 'Database Activity Monitoring' },
+  { acronym: 'DBA', definition: 'Database Administrator' },
+  { acronym: 'ERP', definition: 'Enterprise Resource Planning' },
+  { acronym: 'GDPR', definition: 'General Data Protection Regulation' },
+  { acronym: 'IT', definition: 'Information Technology' },
+  { acronym: 'Jira', definition: 'A popular issue tracking product developed by Atlassian' },
+  { acronym: 'MAP', definition: 'Management Action Plan' },
+  { acronym: 'Q4', definition: 'Fourth Quarter' },
+  { acronym: 'RBAC', definition: 'Role-Based Access Control' },
+  { acronym: 'TLS', definition: 'Transport Layer Security' },
+];
 
 export const mockReportData: ReportItemType[] = [
   {
@@ -148,19 +164,14 @@ export const mockReportData: ReportItemType[] = [
     id: 'chap5',
     type: 'chapter',
     title: 'Acronyms and Abbreviations',
-    contentSummary: 'Acronyms and Abbreviations',
-    completeness: 85,
-    missingTopics: ['Prioritization of recommendations based on effort/impact', 'Suggested owners for each recommendation'],
-    relevantDocuments: ['Recommendation_Tracker.xlsx', 'Best_Practices_Guide.pdf'],
+    contentSummary: 'A list of acronyms and abbreviations used throughout this report for clarity and brevity.',
+    specialDisplay: 'acronyms',
   },
   {
     id: 'chap6',
     type: 'chapter',
     title: 'Distribution List',
-    contentSummary: 'Distribution List',
-    completeness: 85,
-    missingTopics: ['Prioritization of recommendations based on effort/impact', 'Suggested owners for each recommendation'],
-    relevantDocuments: ['Recommendation_Tracker.xlsx', 'Best_Practices_Guide.pdf'],
+    contentSummary: 'This report is intended for the following stakeholders.',
   },
 ];
 
@@ -174,7 +185,5 @@ export const mockProjects: Project[] = [
   { id: 'P002', name: 'Project Beta - Cybersecurity Posture Review' },
   { id: 'P003', name: 'Project Gamma - GDPR Compliance Check' },
   { id: 'P004', name: 'Project Delta - Cloud Infrastructure Security Audit' },
-  { id_005: 'P005', name: 'Project Epsilon - Vendor Risk Management Assessment' },
+  { id: 'P005', name: 'Project Epsilon - Vendor Risk Management Assessment' },
 ];
-
-    

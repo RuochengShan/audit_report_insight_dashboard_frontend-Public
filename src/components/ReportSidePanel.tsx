@@ -9,6 +9,7 @@ import type { ReportItemType } from '@/lib/mock-data';
 import AiInsightGenerator from '@/components/AiInsightGenerator';
 import { Badge } from '@/components/ui/badge';
 import { ListChecks, Paperclip, FileText, X } from 'lucide-react';
+import { AcronymsTable } from './AcronymsTable';
 
 interface ReportSidePanelProps {
   isOpen: boolean;
@@ -20,6 +21,8 @@ const ReportSidePanel: React.FC<ReportSidePanelProps> = ({ isOpen, onOpenChange,
   if (!selectedItem) {
     return null;
   }
+
+  const hasCompleteness = typeof selectedItem.completeness === 'number';
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -39,71 +42,79 @@ const ReportSidePanel: React.FC<ReportSidePanelProps> = ({ isOpen, onOpenChange,
               </Button>
             </SheetClose>
           </div>
-           <Badge variant={selectedItem.completeness > 70 ? "default" : selectedItem.completeness > 40 ? "secondary" : "destructive"} className="mt-2 w-fit">
-            Completeness: {selectedItem.completeness}%
-          </Badge>
+          {hasCompleteness && (
+            <Badge variant={selectedItem.completeness! > 85 ? "default" : selectedItem.completeness! > 40 ? "secondary" : "destructive"} className="mt-2 w-fit">
+              Completeness: {selectedItem.completeness}%
+            </Badge>
+          )}
         </SheetHeader>
 
         <ScrollArea className="flex-grow p-6">
-          <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold font-headline text-lg mb-2 flex items-center">
-                <FileText className="mr-2 h-5 w-5 text-primary" />
-                Summary
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed bg-muted/30 p-3 rounded-md">
-                {selectedItem.contentSummary}
-              </p>
-            </div>
+          {selectedItem.specialDisplay === 'acronyms' ? (
+            <AcronymsTable />
+          ) : (
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-semibold font-headline text-lg mb-2 flex items-center">
+                  <FileText className="mr-2 h-5 w-5 text-primary" />
+                  Summary
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed bg-muted/30 p-3 rounded-md">
+                  {selectedItem.contentSummary}
+                </p>
+              </div>
 
-            <Separator />
+              {selectedItem.missingTopics && selectedItem.missingTopics.length > 0 && (
+                <>
+                  <Separator />
+                  <div>
+                    <h3 className="font-semibold font-headline text-lg mb-2 flex items-center">
+                      <ListChecks className="mr-2 h-5 w-5 text-destructive" />
+                      What's Still Missing?
+                    </h3>
+                    <ul className="list-disc list-inside space-y-1 text-sm text-foreground pl-2">
+                      {selectedItem.missingTopics.map((topic, index) => (
+                        <li key={index} className="py-1">{topic}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
 
-            <div>
-              <h3 className="font-semibold font-headline text-lg mb-2 flex items-center">
-                <ListChecks className="mr-2 h-5 w-5 text-destructive" />
-                What's Still Missing?
-              </h3>
-              {selectedItem.missingTopics && selectedItem.missingTopics.length > 0 ? (
-                <ul className="list-disc list-inside space-y-1 text-sm text-foreground pl-2">
-                  {selectedItem.missingTopics.map((topic, index) => (
-                    <li key={index} className="py-1">{topic}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-sm text-muted-foreground italic">No specific missing items noted for this section.</p>
+              {hasCompleteness && (
+                <>
+                  <Separator />
+                  <AiInsightGenerator auditReportSectionContent={selectedItem.contentSummary} />
+                </>
+              )}
+
+
+              {selectedItem.relevantDocuments && selectedItem.relevantDocuments.length > 0 && (
+                <>
+                  <Separator />
+                  <div>
+                    <h3 className="font-semibold font-headline text-lg mb-2 flex items-center">
+                      <Paperclip className="mr-2 h-5 w-5 text-primary" />
+                      Relevant Documents & Evidence
+                    </h3>
+                    <ul className="space-y-1 text-sm text-foreground">
+                      {selectedItem.relevantDocuments.map((doc, index) => (
+                        <li key={index} className="flex items-center py-1">
+                          <FileText className="mr-2 h-4 w-4 text-muted-foreground flex-shrink-0" />
+                          <span>{doc}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
               )}
             </div>
-
-            <Separator />
-            
-            <AiInsightGenerator auditReportSectionContent={selectedItem.contentSummary} />
-
-            <Separator />
-
-            <div>
-              <h3 className="font-semibold font-headline text-lg mb-2 flex items-center">
-                <Paperclip className="mr-2 h-5 w-5 text-primary" />
-                Relevant Documents & Evidence
-              </h3>
-              {selectedItem.relevantDocuments && selectedItem.relevantDocuments.length > 0 ? (
-                <ul className="space-y-1 text-sm text-foreground">
-                  {selectedItem.relevantDocuments.map((doc, index) => (
-                    <li key={index} className="flex items-center py-1">
-                      <FileText className="mr-2 h-4 w-4 text-muted-foreground flex-shrink-0" />
-                      <span>{doc}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-sm text-muted-foreground italic">No specific documents listed for this section.</p>
-              )}
-            </div>
-          </div>
+          )}
         </ScrollArea>
         <div className="p-6 border-t">
-            <SheetClose asChild>
-                <Button variant="outline" className="w-full">Close Panel</Button>
-            </SheetClose>
+          <SheetClose asChild>
+            <Button variant="outline" className="w-full">Close Panel</Button>
+          </SheetClose>
         </div>
       </SheetContent>
     </Sheet>
