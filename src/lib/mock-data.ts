@@ -60,7 +60,7 @@ export const mockReportData: ReportItemType[] = [
       {
         id: 'sec2.1',
         type: 'section',
-        title: 'Section 2.1: High-Risk Findings',
+        title: 'Objectives',
         contentSummary: 'Focuses on critical vulnerabilities and issues requiring immediate attention.',
         completeness: 55,
         missingTopics: ['Specific instances and locations of high-risk items', 'Cross-references to violated policies'],
@@ -69,7 +69,7 @@ export const mockReportData: ReportItemType[] = [
       {
         id: 'sec2.2',
         type: 'section',
-        title: 'Section 2.2: Medium-Risk Findings',
+        title: 'Scope',
         contentSummary: 'Describes significant issues that need to be addressed in a timely manner.',
         completeness: 30,
         missingTopics: ['Potential cascading effects', 'Historical trend analysis if applicable'],
@@ -87,15 +87,80 @@ export const mockReportData: ReportItemType[] = [
     relevantDocuments: ['Recommendation_Tracker.xlsx', 'Best_Practices_Guide.pdf'],
     subItems: [
       {
-        id: 'sec3.2',
+        id: 'sec3.1',
         type: 'section',
-        title: 'xxxx',
+        title: 'About the Process',
         contentSummary: 'Related to the subheading under reivew',
         completeness: 30,
         missingTopics: ['Potential cascading effects', 'Historical trend analysis if applicable'],
         relevantDocuments: ['ControlGapAnalysis.pdf'],
-      }
+      },
+      {
+        id: 'sec3.2',
+        type: 'section',
+        title: 'Prior Audit Work',
+        contentSummary: 'Related to the subheading under reivew',
+        completeness: 30,
+        missingTopics: ['Potential cascading effects', 'Historical trend analysis if applicable'],
+        relevantDocuments: ['ControlGapAnalysis.pdf'],
+      },
+      {
+        id: 'sec3.3',
+        type: 'section',
+        title: 'Going Forward',
+        contentSummary: 'Related to the subheading under reivew',
+        completeness: 30,
+        missingTopics: ['Potential cascading effects', 'Historical trend analysis if applicable'],
+        relevantDocuments: ['ControlGapAnalysis.pdf'],
+      },
     ]
+  },
+  {
+    id: 'chap4',
+    type: 'chapter',
+    title: 'III. Observations and Management Action Plans',
+    contentSummary: 'Actionable recommendations to address identified findings and improve controls.',
+    completeness: 85,
+    missingTopics: ['Prioritization of recommendations based on effort/impact', 'Suggested owners for each recommendation'],
+    relevantDocuments: ['Recommendation_Tracker.xlsx', 'Best_Practices_Guide.pdf'],
+    subItems: [
+      {
+        id: 'sec4.1',
+        type: 'section',
+        title: 'Working Well',
+        contentSummary: 'Related to the subheading under reivew',
+        completeness: 30,
+        missingTopics: ['Potential cascading effects', 'Historical trend analysis if applicable'],
+        relevantDocuments: ['ControlGapAnalysis.pdf'],
+      },
+      {
+        id: 'sec4.2',
+        type: 'section',
+        title: 'Opportunities for Improvement',
+        contentSummary: 'Related to the subheading under reivew',
+        completeness: 30,
+        missingTopics: ['Potential cascading effects', 'Historical trend analysis if applicable'],
+        relevantDocuments: ['ControlGapAnalysis.pdf'],
+      },
+    ]
+  },
+  {
+    id: 'chap5',
+    type: 'chapter',
+    title: 'Acronyms and Abbreviations',
+    contentSummary: 'Acronyms and Abbreviations',
+    completeness: 85,
+    missingTopics: ['Prioritization of recommendations based on effort/impact', 'Suggested owners for each recommendation'],
+    relevantDocuments: ['Recommendation_Tracker.xlsx', 'Best_Practices_Guide.pdf'],
+  },
+  {
+    id: 'chap6',
+    type: 'chapter',
+    title: 'Distribution List',
+    contentSummary: 'Distribution List',
+    completeness: 85,
+    missingTopics: ['Prioritization of recommendations based on effort/impact', 'Suggested owners for each recommendation'],
+    relevantDocuments: ['Recommendation_Tracker.xlsx', 'Best_Practices_Guide.pdf'],
   },
 ];
 
