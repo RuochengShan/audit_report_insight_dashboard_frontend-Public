@@ -78,7 +78,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ item, onItemClick, selectedItem
         </CardHeader>
         { (isExpanded || level === 0) && ( // Show content for expanded items or top-level items
           <CardContent className="px-4 pb-3 pt-0">
-            <p className={cn("text-sm text-muted-foreground truncate", !hasSubItems && "mb-2")}>{item.contentSummary}</p>
+            <p className={cn("text-sm text-muted-foreground", !hasSubItems && "mb-2")}>{item.contentSummary}</p>
             <Progress
               value={item.completeness}
               aria-label={`Completeness: ${item.completeness}%`}
