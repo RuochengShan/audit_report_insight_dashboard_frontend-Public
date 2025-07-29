@@ -38,7 +38,7 @@ export default function RootLayout({
               <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton asChild tooltip="Planning">
-                        <Link href="/">
+                        <Link href="/planning">
                             <Laptop />
                             Planning
                         </Link>
@@ -46,7 +46,7 @@ export default function RootLayout({
                 </SidebarMenuItem>
                  <SidebarMenuItem>
                     <SidebarMenuButton asChild tooltip="Fieldwork">
-                        <Link href="/fieldwork/insight">
+                        <Link href="/fieldwork">
                             <Search />
                             Fieldwork
                         </Link>
@@ -54,7 +54,7 @@ export default function RootLayout({
                 </SidebarMenuItem>
                  <SidebarMenuItem>
                     <SidebarMenuButton asChild tooltip="Reporting">
-                        <Link href="/">
+                        <Link href="/reporting">
                             <FileText />
                             Reporting
                         </Link>
@@ -62,7 +62,7 @@ export default function RootLayout({
                 </SidebarMenuItem>
                  <SidebarMenuItem>
                     <SidebarMenuButton asChild tooltip="Monitoring">
-                        <Link href="/">
+                        <Link href="/monitoring">
                             <Activity />
                             Monitoring
                         </Link>

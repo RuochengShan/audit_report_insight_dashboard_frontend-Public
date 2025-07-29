@@ -6,25 +6,25 @@ const functions = [
   {
     title: 'Planning',
     icon: ClipboardList,
-    href: '#',
+    href: '/planning',
     description: 'Define audit scope, objectives, and resources.'
   },
   {
     title: 'Fieldwork',
     icon: Search,
-    href: '/fieldwork/insight',
+    href: '/fieldwork',
     description: 'Execute tests, gather evidence, and analyze data.'
   },
   {
     title: 'Reporting',
     icon: FileText,
-    href: '#',
+    href: '/reporting',
     description: 'Communicate findings and recommendations.'
   },
   {
     title: 'Monitoring',
     icon: Activity,
-    href: '#',
+    href: '/monitoring',
     description: 'Track implementation of action plans.'
   }
 ];
