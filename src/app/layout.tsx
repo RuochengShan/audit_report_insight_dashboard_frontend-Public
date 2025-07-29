@@ -27,12 +27,12 @@ export default function RootLayout({
         <SidebarProvider>
           <Sidebar>
             <SidebarHeader>
-              <div className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-2 text-sidebar-foreground hover:text-sidebar-primary transition-colors">
                  <div className="p-1.5 rounded-lg bg-primary text-primary-foreground">
                     <Home className="h-6 w-6" />
                  </div>
                  <h1 className="font-headline text-lg font-semibold">Audit Hub</h1>
-              </div>
+              </Link>
             </SidebarHeader>
             <SidebarContent>
               <SidebarMenu>
