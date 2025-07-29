@@ -1,0 +1,24 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Package } from "lucide-react";
+
+export default function ReportingPage() {
+  return (
+    <div>
+      <h1 className="text-3xl sm:text-4xl font-headline font-bold text-primary tracking-tight mb-6">
+        Reporting Dashboard
+      </h1>
+      <Card>
+        <CardHeader>
+          <CardTitle>Coming Soon</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center justify-center text-center text-muted-foreground p-8">
+            <Package className="h-16 w-16 mb-4" />
+            <p>This section is under construction.</p>
+            <p>Functions related to audit reporting will be available here.</p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
