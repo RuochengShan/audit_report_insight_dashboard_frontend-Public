@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { UploadCloud, FileSearch2 } from 'lucide-react';
 import { SimilarityChart } from '@/components/SimilarityChart';
 import { AnalysisReport, type AnalysisResult } from '@/components/AnalysisReport';
+import { AiChatInterface } from '@/components/AiChatInterface';
 
 export default function SimilarityAnalysisPage() {
   const [clientFile, setClientFile] = React.useState<File | null>(null);
@@ -157,6 +158,7 @@ export default function SimilarityAnalysisPage() {
             </CardContent>
           </Card>
           <AnalysisReport results={analysisReport} />
+          <AiChatInterface />
         </div>
       )}
     </div>
