@@ -47,41 +47,42 @@ export default function SimilarityAnalysisPage() {
         {
           chapter: "Objective and Scope",
           changes: [
-            "Objective 1 was rephrased for clarity, changing 'assess' to 'quantify'.",
-            "Scope was narrowed to exclude mobile application endpoints, which will be covered in a separate review.",
+            "Formatting Adjustments: In the revised version, there is a slight formatting change in the numbering of \"Administrative payments\" and \"Corporate procurement/Administrative contracts management.\" The superscript \"2\" is moved to follow the period instead of preceding it. This is a minor typographical adjustment.",
           ],
           deletions: [
-            "Reference to 'COBIT framework' was removed from the objectives section.",
+            "Footnote Reference: The original version includes a footnote reference \"2\" after \"Administrative payments\" and \"Corporate procurement/Administrative contracts management,\" which suggests there might have been additional information or clarification provided in a footnote. The revised version maintains the superscript but does not provide any footnote content, indicating that any associated footnote content has been removed.",
           ],
           additions: [
-            "A new objective was added to assess compliance with the new internal Data Privacy Policy (Ref: POL-DP-2024).",
+            "No New Information: There is no new information added in the revised version. The content remains consistent with the original version, aside from the minor formatting change mentioned above",
           ],
         },
         {
           chapter: "Background",
           changes: [
-            "The 'Prior Audit Work' section was updated to reflect the closure of finding IA-2023-08-03.",
+            "Rewording: The term \\”RPA\\” in the original version was changed to \\”RPA Specialist\\” in the revised version. This change provides a more specific title for the role, potentially clarifying the responsibilities or expertise of the position.",
           ],
           deletions: [
-            "A paragraph describing the history of the 'Orion' ERP system was removed for brevity.",
+            "Vendor Invoice Submission: The original version included a paragraph about Haitian vendors submitting invoices via email rather than using the designated vendor portal. This paragraph highlighted the extra step added to the administrative payment process, involving manual entry into SAP by the COF’s front office operator. This information was completely removed in the revised version.",
           ],
           additions: [
-            "A new section 'Stakeholder Interviews' was added, summarizing discussions with key process owners.",
-            "A process flow diagram was added as an appendix and referenced in the text.",
+            "No New Information",
           ],
         },
         {
           chapter: "Observations and Management Action Plans",
           changes: [
-            "Finding 2024-01 was downgraded from 'High Risk' to 'Medium Risk' based on new compensating controls identified.",
-            "The target completion date for the MAP for finding 2024-02 was moved from Q3 to Q4 2024.",
+            "Clarification and Rewording: The phrase \\”COF Vehicles fleet was not adequately maintained\\” was changed to \\”COF Vehicles fleet inventory was not adequately maintained\\” to specify the issue with inventory rather than maintenance.",
+            "Clarification and Rewording: The risk associated with petty cash management was rephrased from \\”Unauthorized, and/or incorrect monetary outflows\\” to \\”Unauthorized, and/or incorrect use of the petty cash could result in monetary resources being used for non-intended purposes,\\” providing a clearer explanation of the potential consequences.",
+            "Additional Details: In Observation 1, a new detail was added regarding the practice of Haitian vendors submitting invoices via email, which adds an extra step to the administrative payment process.",
+            "Additional Details: In Observation 5, the risk was expanded to include potential security issues and negative impacts on the Bank's reputation."
           ],
           deletions: [
-            "Commendation for 'Mature Change Management Process' was removed as it was deemed out of scope for the QA review.",
+            "Specific Details Removed: The original version included a detailed explanation of the AUG's review of administrative payment transactions timeframes, mentioning the involvement of AUG's review and the positive effect of Centric and VPC/CID front office. The revised version simplifies this to \\”Administrative payment transactions timeframes validated the positive effect obtained by involving the CID's front office and Centric hub.\\”",
+            "The original version included a detailed explanation of the discrepancies in vehicle sales documentation, mentioning emails from the RPA. The revised version simplifies this to \\”it was poorly supported with emails from the RPA.\\”"
           ],
           additions: [
-            "A new finding (2024-03) was added related to inadequate password complexity settings on a supporting server.",
-            "Evidence screenshots were added for Finding 2024-01 to better illustrate the condition.",
+            "Additional Practices and Risks: In Observation 1, the revised version adds a note about the practice of Haitian vendors submitting invoices via email, which adds an extra step to the administrative payment process.",
+            "EAdditional Practices and Risks: In Observation 5, the risk associated with non-compliance with the OAS passports regulation was expanded to include potential security issues and negative impacts on the Bank's reputation",
           ],
         },
       ];
