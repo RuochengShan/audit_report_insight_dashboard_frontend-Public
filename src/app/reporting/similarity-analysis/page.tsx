@@ -148,13 +148,13 @@ export default function SimilarityAnalysisPage() {
 
       {isAnalyzed && (
         <div className="space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <Card className="shadow-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            <Card className="shadow-lg flex flex-col">
               <CardHeader>
                 <CardTitle className="font-headline text-2xl">Similarity Scores</CardTitle>
                 <CardDescription>Comparison of similarity metrics between the two documents.</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-grow">
                 <SimilarityChart data={chartData} />
               </CardContent>
             </Card>
