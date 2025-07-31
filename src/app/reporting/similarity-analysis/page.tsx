@@ -158,9 +158,9 @@ export default function SimilarityAnalysisPage() {
                 <SimilarityChart data={chartData} />
               </CardContent>
             </Card>
-            <AnalysisReport results={analysisReport} />
+            <AiChatInterface />
           </div>
-          <AiChatInterface />
+          <AnalysisReport results={analysisReport} />
         </div>
       )}
     </div>
