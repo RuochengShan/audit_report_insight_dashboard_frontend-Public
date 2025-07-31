@@ -7,10 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { UploadCloud, FileSearch2 } from 'lucide-react';
+import { SimilarityChart } from '@/components/SimilarityChart';
 
 export default function SimilarityAnalysisPage() {
   const [clientFile, setClientFile] = React.useState<File | null>(null);
   const [qaFile, setQaFile] = React.useState<File | null>(null);
+  const [isAnalyzed, setIsAnalyzed] = React.useState(false);
+  const [analysisResult, setAnalysisResult] = React.useState<any[]>([]);
 
   const handleClientFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -28,6 +31,17 @@ export default function SimilarityAnalysisPage() {
     if (clientFile && qaFile) {
       // In a real app, you would handle the analysis here
       console.log('Analyzing files:', clientFile.name, qaFile.name);
+      
+      const mockResults = [
+        { name: 'Cosine Similarity', score: 92 },
+        { name: 'Jaccard Index', score: 85 },
+        { name: 'Levenshtein Distance', score: 78 },
+        { name: 'Word Mover\'s Distance', score: 88 },
+        { name: 'TF-IDF Similarity', score: 95 },
+      ];
+      setAnalysisResult(mockResults);
+      setIsAnalyzed(true);
+
     } else {
       // alert('Please select both files to analyze.');
     }
@@ -83,6 +97,18 @@ export default function SimilarityAnalysisPage() {
             Analyze for Similarity
         </Button>
       </div>
+
+      {isAnalyzed && (
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="font-headline text-2xl">Similarity Scores</CardTitle>
+            <CardDescription>Comparison of similarity metrics between the two documents.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SimilarityChart data={analysisResult} />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
