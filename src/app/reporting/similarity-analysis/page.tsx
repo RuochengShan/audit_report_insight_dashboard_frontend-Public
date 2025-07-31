@@ -148,16 +148,18 @@ export default function SimilarityAnalysisPage() {
 
       {isAnalyzed && (
         <div className="space-y-8">
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl">Similarity Scores</CardTitle>
-              <CardDescription>Comparison of similarity metrics between the two documents.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SimilarityChart data={chartData} />
-            </CardContent>
-          </Card>
-          <AnalysisReport results={analysisReport} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="font-headline text-2xl">Similarity Scores</CardTitle>
+                <CardDescription>Comparison of similarity metrics between the two documents.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SimilarityChart data={chartData} />
+              </CardContent>
+            </Card>
+            <AnalysisReport results={analysisReport} />
+          </div>
           <AiChatInterface />
         </div>
       )}
