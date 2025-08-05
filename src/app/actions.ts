@@ -1,7 +1,7 @@
 // src/app/actions.ts
 'use server';
-// import { generateAuditInsights, type GenerateAuditInsightsInput, type GenerateAuditInsightsOutput } from '@/ai/flows/generate-audit-insights';
 import type { GenerateAuditInsightsInput, GenerateAuditInsightsOutput } from '@/ai/flows/generate-audit-insights';
+import { mockReportData, type ReportItemType } from '@/lib/mock-data';
 
 export async function getAiInsightsAction(input: GenerateAuditInsightsInput): Promise<GenerateAuditInsightsOutput> {
   // Mock implementation
@@ -27,4 +27,20 @@ export async function getAiInsightsAction(input: GenerateAuditInsightsInput): Pr
   //   }
   //   throw new Error("An unknown error occurred while generating AI insights.");
   // }
+}
+
+
+export async function processAuditReportAction(formData: FormData): Promise<ReportItemType[]> {
+    const file = formData.get('file') as File;
+  
+    // In a real application, you would send this file to a service
+    // that can parse the PDF, analyze it, and return structured data.
+    // For now, we'll just log the file name and return mock data.
+    console.log('Processing file on server:', file.name);
+  
+    // Simulate network delay and processing time
+    await new Promise(resolve => setTimeout(resolve, 1500));
+  
+    // Return the same mock data structure
+    return mockReportData;
 }

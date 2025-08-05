@@ -1,15 +1,21 @@
+
 'use client';
 
 import * as React from 'react';
-import { mockReportData, type ReportItemType } from '@/lib/mock-data';
+import { type ReportItemType } from '@/lib/mock-data';
 import ReportDisplay from './ReportDisplay';
 import ReportSidePanel from './ReportSidePanel';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LayoutDashboard } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Info } from 'lucide-react';
 
-const InteractiveReportTab: React.FC = () => {
-  const [reportData] = React.useState<ReportItemType[]>(mockReportData);
+interface InteractiveReportTabProps {
+  reportData: ReportItemType[];
+}
+
+const InteractiveReportTab: React.FC<InteractiveReportTabProps> = ({ reportData }) => {
   const [selectedItem, setSelectedItem] = React.useState<ReportItemType | null>(null);
   const [isSidePanelOpen, setIsSidePanelOpen] = React.useState(false);
 
@@ -17,6 +23,29 @@ const InteractiveReportTab: React.FC = () => {
     setSelectedItem(item);
     setIsSidePanelOpen(true);
   };
+  
+  React.useEffect(() => {
+    // When new data is loaded, automatically select the first item.
+    if (reportData && reportData.length > 0) {
+      setSelectedItem(reportData[0]);
+    } else {
+        setSelectedItem(null);
+    }
+  }, [reportData]);
+
+
+  if (!reportData || reportData.length === 0) {
+    return (
+        <Alert>
+            <Info className="h-4 w-4" />
+            <AlertTitle className="font-headline">No Report Data</AlertTitle>
+            <AlertDescription>
+            Please upload a report in the &quot;Load Data&quot; tab to get started.
+            </AlertDescription>
+        </Alert>
+    );
+  }
+
 
   return (
     <div className="flex flex-col h-[calc(100vh-200px)] md:h-[calc(100vh-180px)]"> {/* Adjust height as needed */}
