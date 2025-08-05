@@ -1,7 +1,7 @@
 // src/app/actions.ts
 'use server';
-// import { generateAuditInsights, type GenerateAuditInsightsInput, type GenerateAuditInsightsOutput } from '@/ai/flows/generate-audit-insights';
 import type { GenerateAuditInsightsInput, GenerateAuditInsightsOutput } from '@/ai/flows/generate-audit-insights';
+import { mockReportData, type ReportItemType } from '@/lib/mock-data';
 
 export async function getAiInsightsAction(input: GenerateAuditInsightsInput): Promise<GenerateAuditInsightsOutput> {
   // Mock implementation
@@ -27,4 +27,45 @@ export async function getAiInsightsAction(input: GenerateAuditInsightsInput): Pr
   //   }
   //   throw new Error("An unknown error occurred while generating AI insights.");
   // }
+}
+
+
+export async function processAuditReportAction(formData: FormData): Promise<ReportItemType[]> {
+    const file = formData.get('file') as File;
+    console.log('Processing file on server:', file.name);
+
+    const apiUrl = process.env.AUDIT_REPORT_API_URL;
+    if (!apiUrl) {
+        throw new Error("API URL is not configured. Please set AUDIT_REPORT_API_URL in your environment variables.");
+    }
+    
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            // Try to parse error message from the API, otherwise use a generic one
+            let errorMessage = `API Error: ${response.status} ${response.statusText}`;
+            try {
+                const errorBody = await response.json();
+                errorMessage = errorBody.detail || errorMessage;
+            } catch (e) {
+                // Ignore if the response body is not JSON
+            }
+            throw new Error(errorMessage);
+        }
+
+        const data: ReportItemType[] = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("Error processing audit report:", error);
+        if (error instanceof Error) {
+            // Prepend a more user-friendly message to network or API errors
+            throw new Error(`Failed to connect to the processing service: ${error.message}`);
+        }
+        throw new Error("An unknown error occurred while processing the audit report.");
+    }
 }

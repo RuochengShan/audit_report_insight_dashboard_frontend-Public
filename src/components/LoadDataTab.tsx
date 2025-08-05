@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -6,27 +7,61 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, UploadCloud } from 'lucide-react';
-import { mockProjects, type Project } from '@/lib/mock-data';
+import { Search, UploadCloud, Loader2, AlertTriangle } from 'lucide-react';
+import { mockProjects, type Project, type ReportItemType } from '@/lib/mock-data';
+import { processAuditReportAction } from '@/app/actions';
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-const LoadDataTab: React.FC = () => {
+
+interface LoadDataTabProps {
+  onDataLoaded: (data: ReportItemType[]) => void;
+}
+
+const LoadDataTab: React.FC<LoadDataTabProps> = ({ onDataLoaded }) => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [selectedProject, setSelectedProject] = React.useState<string>('');
   const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const { toast } = useToast();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setSelectedFile(event.target.files[0]);
+      setError(null);
     }
   };
 
-  const handleUpload = () => {
-    if (selectedFile) {
-      // In a real app, you would handle the file upload here
-      console.log('Uploading file:', selectedFile.name);
-      // alert(`File "${selectedFile.name}" selected for upload.`);
-    } else {
-      // alert('Please select a file to upload.');
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setError('Please select a file to upload.');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    try {
+      const result = await processAuditReportAction(formData);
+      toast({
+        title: "Upload Successful",
+        description: `Report "${selectedFile.name}" has been processed.`,
+      });
+      onDataLoaded(result);
+    } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred during processing.';
+      setError(errorMessage);
+       toast({
+        variant: "destructive",
+        title: "Upload Failed",
+        description: errorMessage,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -43,17 +78,33 @@ const LoadDataTab: React.FC = () => {
             Upload Audit Report
           </CardTitle>
           <CardDescription>
-            Upload your audit report in PDF format to begin analysis.
+            Upload your audit report in PDF format to begin analysis. The system will process the document to create an interactive report.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="pdf-upload">PDF File</Label>
-            <Input id="pdf-upload" type="file" accept=".pdf" onChange={handleFileChange} className="file:text-primary file:font-semibold"/>
+            <Input id="pdf-upload" type="file" accept=".pdf" onChange={handleFileChange} className="file:text-primary file:font-semibold" disabled={isLoading} />
           </div>
-          <Button onClick={handleUpload} disabled={!selectedFile} className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            <UploadCloud className="mr-2 h-4 w-4" />
-            Upload PDF
+           {error && (
+            <Alert variant="destructive" className="mt-4">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          <Button onClick={handleUpload} disabled={!selectedFile || isLoading} className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+               <>
+                <UploadCloud className="mr-2 h-4 w-4" />
+                Upload and Process PDF
+               </>
+            )}
           </Button>
           {selectedFile && <p className="text-sm text-muted-foreground">Selected file: {selectedFile.name}</p>}
         </CardContent>
