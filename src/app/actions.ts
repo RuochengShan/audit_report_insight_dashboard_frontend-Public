@@ -32,15 +32,40 @@ export async function getAiInsightsAction(input: GenerateAuditInsightsInput): Pr
 
 export async function processAuditReportAction(formData: FormData): Promise<ReportItemType[]> {
     const file = formData.get('file') as File;
-  
-    // In a real application, you would send this file to a service
-    // that can parse the PDF, analyze it, and return structured data.
-    // For now, we'll just log the file name and return mock data.
     console.log('Processing file on server:', file.name);
-  
-    // Simulate network delay and processing time
-    await new Promise(resolve => setTimeout(resolve, 1500));
-  
-    // Return the same mock data structure
-    return mockReportData;
+
+    const apiUrl = process.env.AUDIT_REPORT_API_URL;
+    if (!apiUrl) {
+        throw new Error("API URL is not configured. Please set AUDIT_REPORT_API_URL in your environment variables.");
+    }
+    
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            // Try to parse error message from the API, otherwise use a generic one
+            let errorMessage = `API Error: ${response.status} ${response.statusText}`;
+            try {
+                const errorBody = await response.json();
+                errorMessage = errorBody.detail || errorMessage;
+            } catch (e) {
+                // Ignore if the response body is not JSON
+            }
+            throw new Error(errorMessage);
+        }
+
+        const data: ReportItemType[] = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("Error processing audit report:", error);
+        if (error instanceof Error) {
+            // Prepend a more user-friendly message to network or API errors
+            throw new Error(`Failed to connect to the processing service: ${error.message}`);
+        }
+        throw new Error("An unknown error occurred while processing the audit report.");
+    }
 }
