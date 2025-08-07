@@ -31,7 +31,7 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
             }}
           />
           <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '16px' }}/>
-          <Bar dataKey="score" fill="hsl(var(--primary))" name="Similarity Score (%)" />
+          <Bar dataKey="score" fill="hsl(var(--primary))" name="Similarity Score (%)" maxBarSize={60} />
         </BarChart>
       </ResponsiveContainer>
   );
