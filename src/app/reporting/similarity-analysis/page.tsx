@@ -141,7 +141,7 @@ export default function SimilarityAnalysisPage() {
                 <CardDescription>Comparison of similarity metrics between the two documents.</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[400px] w-full">
+                <div className="h-[500px] w-full">
                   <SimilarityChart data={analysisData.chartData} />
                 </div>
               </CardContent>
