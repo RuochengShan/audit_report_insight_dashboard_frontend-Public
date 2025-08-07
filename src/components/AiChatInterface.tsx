@@ -86,7 +86,7 @@ export function AiChatInterface({ clientFileContent, qaFileContent }: AiChatInte
           Ask questions about the uploaded documents to get AI-powered answers.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col flex-grow h-[500px]">
+      <CardContent className="flex flex-col flex-grow h-[400px]">
         <ScrollArea className="flex-grow p-4 border rounded-md mb-4 bg-muted/20" ref={scrollAreaRef}>
           <div className="space-y-4">
             {messages.map((message, index) => (

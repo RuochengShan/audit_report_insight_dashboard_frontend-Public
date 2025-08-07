@@ -11,7 +11,7 @@ interface SimilarityChartProps {
 
 export function SimilarityChart({ data }: SimilarityChartProps) {
   return (
-    <div className="w-full h-full min-h-[450px]">
+    <div className="w-full h-full min-h-[400px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
@@ -19,11 +19,11 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
             top: 5,
             right: 30,
             left: 20,
-            bottom: 5,
+            bottom: 75,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} interval={0} />
+          <XAxis dataKey="name" angle={-45} textAnchor="end" interval={0} />
           <YAxis />
           <Tooltip
             contentStyle={{
