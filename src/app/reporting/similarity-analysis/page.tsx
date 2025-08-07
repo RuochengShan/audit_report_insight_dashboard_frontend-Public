@@ -14,10 +14,6 @@ import { analyzeSimilarityAction, type SimilarityAnalysisResponse } from '@/app/
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
 export default function SimilarityAnalysisPage() {
   const [clientFile, setClientFile] = React.useState<File | null>(null);
   const [qaFile, setQaFile] = React.useState<File | null>(null);
@@ -159,11 +155,3 @@ export default function SimilarityAnalysisPage() {
     </div>
   );
 }
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
-};
