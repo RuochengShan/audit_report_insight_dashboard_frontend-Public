@@ -14,7 +14,6 @@ import { analyzeSimilarityAction, type SimilarityAnalysisResponse } from '@/app/
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-
 export default function SimilarityAnalysisPage() {
   const [clientFile, setClientFile] = React.useState<File | null>(null);
   const [qaFile, setQaFile] = React.useState<File | null>(null);
