@@ -10,7 +10,7 @@ interface SimilarityChartProps {
 
 export function SimilarityChart({ data }: SimilarityChartProps) {
   return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height={400}>
         <BarChart
           data={data}
           margin={{
