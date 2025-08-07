@@ -114,8 +114,8 @@ export default function SimilarityAnalysisPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="client-pdf-upload">PDF File</Label>
-              <Input id="client-pdf-upload" type="file" accept=".pdf" onChange={handleClientFileChange} className="file:text-primary file:font-semibold"/>
+              <Label htmlFor="client-doc-upload">Word Document</Label>
+              <Input id="client-doc-upload" type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={handleClientFileChange} className="file:text-primary file:font-semibold"/>
             </div>
             {clientFile && <p className="text-sm text-muted-foreground">Selected file: {clientFile.name}</p>}
           </CardContent>
@@ -133,8 +133,8 @@ export default function SimilarityAnalysisPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="qa-pdf-upload">PDF File</Label>
-              <Input id="qa-pdf-upload" type="file" accept=".pdf" onChange={handleQaFileChange} className="file:text-primary file:font-semibold"/>
+              <Label htmlFor="qa-doc-upload">Word Document</Label>
+              <Input id="qa-doc-upload" type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={handleQaFileChange} className="file:text-primary file:font-semibold"/>
             </div>
             {qaFile && <p className="text-sm text-muted-foreground">Selected file: {qaFile.name}</p>}
           </CardContent>
