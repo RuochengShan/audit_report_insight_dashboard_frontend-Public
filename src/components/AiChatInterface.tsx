@@ -33,16 +33,17 @@ export function AiChatInterface({ clientFileContent, qaFileContent }: AiChatInte
     if (input.trim() && !isLoading) {
       const userMessage: Message = { sender: 'user', text: input };
       setMessages(prev => [...prev, userMessage]);
+      const currentInput = input;
       setInput('');
       setIsLoading(true);
       setError(null);
 
       try {
-        const result = await getSimilaritySummaryAction({
-          clientVersionContent: clientFileContent,
-          qaVersionContent: qaFileContent,
-          query: input,
-        });
+        const result = await getSimilaritySummaryAction(
+          clientFileContent,
+          qaFileContent,
+          currentInput
+        );
         const aiResponse: Message = { sender: 'ai', text: result.answer };
         setMessages(prev => [...prev, aiResponse]);
       } catch (e) {

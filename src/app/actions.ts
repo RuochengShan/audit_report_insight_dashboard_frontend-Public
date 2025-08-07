@@ -4,8 +4,6 @@ import type { GenerateAuditInsightsInput, GenerateAuditInsightsOutput } from '@/
 import { generateAuditInsights } from '@/ai/flows/generate-audit-insights';
 import { mockReportData, type ReportItemType } from '@/lib/mock-data';
 import type { AnalysisResult } from '@/components/AnalysisReport';
-import type { SummarizeSimilarityInput, SummarizeSimilarityOutput } from '@/ai/flows/summarize-similarity';
-import { summarizeSimilarity } from '@/ai/flows/summarize-similarity';
 
 
 export interface SimilarityAnalysisResponse {
@@ -13,6 +11,10 @@ export interface SimilarityAnalysisResponse {
   analysisReport: AnalysisResult[];
   clientFileContent: string;
   qaFileContent: string;
+}
+
+export interface SummaryApiResponse {
+  answer: string;
 }
 
 export async function getAiInsightsAction(input: GenerateAuditInsightsInput): Promise<GenerateAuditInsightsOutput> {
@@ -28,16 +30,56 @@ export async function getAiInsightsAction(input: GenerateAuditInsightsInput): Pr
   }
 }
 
-export async function getSimilaritySummaryAction(input: SummarizeSimilarityInput): Promise<SummarizeSimilarityOutput> {
+export async function getSimilaritySummaryAction(clientVersionContent: string, qaVersionContent: string, query: string): Promise<SummaryApiResponse> {
+  const apiUrl = process.env.SUMMARY_API_URL;
+  if (!apiUrl) {
+    console.error("SUMMARY_API_URL environment variable is not set.");
+    throw new Error("Summary API URL is not configured.");
+  }
+
+  console.log(`Forwarding summary request to: ${apiUrl}`);
+
   try {
-    const result = await summarizeSimilarity(input);
-    return result;
-  } catch (error) {
-    console.error("Error generating similarity summary:", error);
-    if (error instanceof Error) {
-      throw new Error(`Failed to generate similarity summary: ${error.message}`);
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        clientVersionContent,
+        qaVersionContent,
+        query,
+      }),
+    });
+    
+    if (!response.ok) {
+        let errorMessage = `API Error: ${response.status} ${response.statusText}`;
+        try {
+            const errorBody = await response.json();
+            errorMessage = errorBody.detail || errorMessage;
+        } catch (e) {
+            // Ignore if the response body is not JSON and use the status text
+        }
+        console.error(`API responded with error: ${errorMessage}`);
+        throw new Error(errorMessage);
     }
-    throw new Error("An unknown error occurred while generating similarity summary.");
+    
+    const data: SummaryApiResponse = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Error getting summary:", error);
+     if (error instanceof Error && error.cause) {
+       const nodeError = error.cause as NodeJS.ErrnoException;
+       if (nodeError.code === 'ECONNREFUSED') {
+         throw new Error(`Connection refused. Is the backend server running at ${apiUrl}?`);
+       }
+    }
+    
+    if (error instanceof Error) {
+        throw new Error(`Failed to connect to the summary service: ${error.message}`);
+    }
+    throw new Error("An unknown error occurred while getting summary.");
   }
 }
 
