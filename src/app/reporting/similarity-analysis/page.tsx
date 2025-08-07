@@ -6,17 +6,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { UploadCloud, FileSearch2 } from 'lucide-react';
+import { UploadCloud, FileSearch2, Loader2, AlertTriangle } from 'lucide-react';
 import { SimilarityChart } from '@/components/SimilarityChart';
 import { AnalysisReport, type AnalysisResult } from '@/components/AnalysisReport';
 import { AiChatInterface } from '@/components/AiChatInterface';
+import { analyzeSimilarityAction, type SimilarityAnalysisResponse } from '@/app/actions';
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 
 export default function SimilarityAnalysisPage() {
   const [clientFile, setClientFile] = React.useState<File | null>(null);
   const [qaFile, setQaFile] = React.useState<File | null>(null);
-  const [isAnalyzed, setIsAnalyzed] = React.useState(false);
-  const [chartData, setChartData] = React.useState<any[]>([]);
-  const [analysisReport, setAnalysisReport] = React.useState<AnalysisResult[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [analysisData, setAnalysisData] = React.useState<SimilarityAnalysisResponse | null>(null);
+  const { toast } = useToast();
 
   const handleClientFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -30,69 +35,34 @@ export default function SimilarityAnalysisPage() {
     }
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (clientFile && qaFile) {
-      // In a real app, you would handle the analysis here
-      console.log('Analyzing files:', clientFile.name, qaFile.name);
-      
-      const mockChartData = [
-        { name: 'Cosine Similarity', score: 92 },
-        { name: 'Jaccard Index', score: 85 },
-        { name: 'Levenshtein Distance', score: 78 },
-        { name: 'Word Mover\'s Distance', score: 88 },
-        { name: 'TF-IDF Similarity', score: 95 },
-      ];
-      
-      const mockAnalysisReport: AnalysisResult[] = [
-        {
-          chapter: "Objective and Scope",
-          changes: [
-            "Formatting Adjustments: In the revised version, there is a slight formatting change in the numbering of \"Administrative payments\" and \"Corporate procurement/Administrative contracts management.\" The superscript \"2\" is moved to follow the period instead of preceding it. This is a minor typographical adjustment.",
-          ],
-          deletions: [
-            "Footnote Reference: The original version includes a footnote reference \"2\" after \"Administrative payments\" and \"Corporate procurement/Administrative contracts management,\" which suggests there might have been additional information or clarification provided in a footnote. The revised version maintains the superscript but does not provide any footnote content, indicating that any associated footnote content has been removed.",
-          ],
-          additions: [
-            "No New Information: There is no new information added in the revised version. The content remains consistent with the original version, aside from the minor formatting change mentioned above",
-          ],
-        },
-        {
-          chapter: "Background",
-          changes: [
-            "Rewording: The term \\”RPA\\” in the original version was changed to \\”RPA Specialist\\” in the revised version. This change provides a more specific title for the role, potentially clarifying the responsibilities or expertise of the position.",
-          ],
-          deletions: [
-            "Vendor Invoice Submission: The original version included a paragraph about Haitian vendors submitting invoices via email rather than using the designated vendor portal. This paragraph highlighted the extra step added to the administrative payment process, involving manual entry into SAP by the COF’s front office operator. This information was completely removed in the revised version.",
-          ],
-          additions: [
-            "No New Information",
-          ],
-        },
-        {
-          chapter: "Observations and Management Action Plans",
-          changes: [
-            "Clarification and Rewording: The phrase \\”COF Vehicles fleet was not adequately maintained\\” was changed to \\”COF Vehicles fleet inventory was not adequately maintained\\” to specify the issue with inventory rather than maintenance.",
-            "Clarification and Rewording: The risk associated with petty cash management was rephrased from \\”Unauthorized, and/or incorrect monetary outflows\\” to \\”Unauthorized, and/or incorrect use of the petty cash could result in monetary resources being used for non-intended purposes,\\” providing a clearer explanation of the potential consequences.",
-            "Additional Details: In Observation 1, a new detail was added regarding the practice of Haitian vendors submitting invoices via email, which adds an extra step to the administrative payment process.",
-            "Additional Details: In Observation 5, the risk was expanded to include potential security issues and negative impacts on the Bank's reputation."
-          ],
-          deletions: [
-            "Specific Details Removed: The original version included a detailed explanation of the AUG's review of administrative payment transactions timeframes, mentioning the involvement of AUG's review and the positive effect of Centric and VPC/CID front office. The revised version simplifies this to \\”Administrative payment transactions timeframes validated the positive effect obtained by involving the CID's front office and Centric hub.\\”",
-            "The original version included a detailed explanation of the discrepancies in vehicle sales documentation, mentioning emails from the RPA. The revised version simplifies this to \\”it was poorly supported with emails from the RPA.\\”"
-          ],
-          additions: [
-            "Additional Practices and Risks: In Observation 1, the revised version adds a note about the practice of Haitian vendors submitting invoices via email, which adds an extra step to the administrative payment process.",
-            "EAdditional Practices and Risks: In Observation 5, the risk associated with non-compliance with the OAS passports regulation was expanded to include potential security issues and negative impacts on the Bank's reputation",
-          ],
-        },
-      ];
+      setIsLoading(true);
+      setError(null);
+      setAnalysisData(null);
 
-      setChartData(mockChartData);
-      setAnalysisReport(mockAnalysisReport);
-      setIsAnalyzed(true);
+      const formData = new FormData();
+      formData.append('clientFile', clientFile);
+      formData.append('qaFile', qaFile);
 
-    } else {
-      // alert('Please select both files to analyze.');
+      try {
+        const result = await analyzeSimilarityAction(formData);
+        setAnalysisData(result);
+        toast({
+          title: "Analysis Complete",
+          description: "Similarity scores and detailed report have been generated.",
+        });
+      } catch (e) {
+        const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Analysis Failed",
+          description: errorMessage,
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -140,14 +110,30 @@ export default function SimilarityAnalysisPage() {
           </CardContent>
         </Card>
       </div>
+       {error && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       <div className="flex justify-center">
-        <Button onClick={handleAnalyze} disabled={!clientFile || !qaFile} size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-            <FileSearch2 className="mr-2 h-5 w-5" />
-            Analyze for Similarity
+        <Button onClick={handleAnalyze} disabled={!clientFile || !qaFile || isLoading} size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Analyzing...
+              </>
+            ) : (
+              <>
+                <FileSearch2 className="mr-2 h-5 w-5" />
+                Analyze for Similarity
+              </>
+            )}
         </Button>
       </div>
 
-      {isAnalyzed && (
+      {analysisData && (
         <div className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             <Card className="shadow-lg flex flex-col">
@@ -156,12 +142,15 @@ export default function SimilarityAnalysisPage() {
                 <CardDescription>Comparison of similarity metrics between the two documents.</CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
-                <SimilarityChart data={chartData} />
+                <SimilarityChart data={analysisData.chartData} />
               </CardContent>
             </Card>
-            <AiChatInterface />
+            <AiChatInterface 
+              clientFileContent={analysisData.clientFileContent}
+              qaFileContent={analysisData.qaFileContent}
+            />
           </div>
-          <AnalysisReport results={analysisReport} />
+          <AnalysisReport results={analysisData.analysisReport} />
         </div>
       )}
     </div>

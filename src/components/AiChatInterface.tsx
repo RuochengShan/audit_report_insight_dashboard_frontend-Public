@@ -6,29 +6,58 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Send, MessageSquare } from 'lucide-react';
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Send, MessageSquare, Loader2, AlertTriangle } from 'lucide-react';
+import { getSimilaritySummaryAction } from '@/app/actions';
+import { useToast } from '@/hooks/use-toast';
 
 interface Message {
   sender: 'user' | 'ai';
   text: string;
 }
 
-export function AiChatInterface() {
+interface AiChatInterfaceProps {
+    clientFileContent: string;
+    qaFileContent: string;
+}
+
+export function AiChatInterface({ clientFileContent, qaFileContent }: AiChatInterfaceProps) {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const scrollAreaRef = React.useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
-  const handleSend = () => {
-    if (input.trim()) {
+  const handleSend = async () => {
+    if (input.trim() && !isLoading) {
       const userMessage: Message = { sender: 'user', text: input };
-      setMessages([...messages, userMessage]);
+      setMessages(prev => [...prev, userMessage]);
       setInput('');
+      setIsLoading(true);
+      setError(null);
 
-      // Mock AI response
-      setTimeout(() => {
-        const aiResponse: Message = { sender: 'ai', text: `This is a mocked AI response to your query: "${input}". In a real implementation, this would be a generated summary based on the document's content.` };
-        setMessages(prevMessages => [...prevMessages, aiResponse]);
-      }, 1000);
+      try {
+        const result = await getSimilaritySummaryAction({
+          clientVersionContent: clientFileContent,
+          qaVersionContent: qaFileContent,
+          query: input,
+        });
+        const aiResponse: Message = { sender: 'ai', text: result.answer };
+        setMessages(prev => [...prev, aiResponse]);
+      } catch (e) {
+        const errorMessage = e instanceof Error ? e.message : "An unknown error occurred.";
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Error Getting AI Response",
+          description: errorMessage,
+        });
+        // Remove the user message if the API call fails
+        setMessages(prev => prev.slice(0, prev.length -1));
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -38,8 +67,15 @@ export function AiChatInterface() {
     }
   };
 
+  React.useEffect(() => {
+    if (scrollAreaRef.current) {
+        scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+    }
+  }, [messages]);
+
+
   return (
-    <Card className="shadow-lg">
+    <Card className="shadow-lg flex flex-col">
       <CardHeader>
         <CardTitle className="font-headline text-2xl flex items-center">
             <MessageSquare className="mr-2 h-6 w-6 text-primary" />
@@ -49,17 +85,17 @@ export function AiChatInterface() {
           Ask questions about the uploaded documents to get AI-powered answers.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col h-[500px]">
-        <ScrollArea className="flex-grow p-4 border rounded-md mb-4 bg-muted/20">
+      <CardContent className="flex flex-col flex-grow h-[500px]">
+        <ScrollArea className="flex-grow p-4 border rounded-md mb-4 bg-muted/20" ref={scrollAreaRef}>
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div key={index} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
                 {message.sender === 'ai' && (
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 bg-primary text-primary-foreground">
                     <AvatarFallback>AI</AvatarFallback>
                   </Avatar>
                 )}
-                <div className={`rounded-lg px-4 py-2 text-sm ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-background'}`}>
+                <div className={`rounded-lg px-4 py-2 text-sm max-w-[85%] whitespace-pre-wrap ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-background'}`}>
                   <p>{message.text}</p>
                 </div>
                  {message.sender === 'user' && (
@@ -74,18 +110,30 @@ export function AiChatInterface() {
                 Start the conversation by asking a question below.
               </div>
             )}
+             {isLoading && (
+                 <div className="flex items-start gap-3">
+                    <Avatar className="h-8 w-8 bg-primary text-primary-foreground">
+                        <AvatarFallback>AI</AvatarFallback>
+                    </Avatar>
+                    <div className="rounded-lg px-4 py-2 text-sm bg-background flex items-center">
+                        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                    </div>
+                </div>
+             )}
           </div>
         </ScrollArea>
+        { error && <p className="text-sm text-destructive mb-2 text-center">{error}</p> }
         <div className="flex items-center gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="e.g., 'Summarize the key changes in the Objective and Scope section.'"
+            placeholder="e.g., 'Summarize the key changes.'"
             className="flex-grow"
+            disabled={isLoading}
           />
-          <Button onClick={handleSend} className="bg-accent hover:bg-accent/90 text-accent-foreground">
-            <Send className="mr-2 h-4 w-4" />
+          <Button onClick={handleSend} disabled={isLoading || !input.trim()} className="bg-accent hover:bg-accent/90 text-accent-foreground">
+            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
             Send
           </Button>
         </div>
