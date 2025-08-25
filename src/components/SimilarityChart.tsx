@@ -2,7 +2,7 @@
 'use client';
 
 import * as React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
 
 interface SimilarityChartProps {
   data: Array<Record<string, string | number>>;
@@ -19,6 +19,17 @@ const barColors = [
   "hsl(var(--chart-5))",
 ];
 
+const CustomizedLabel = (props: any) => {
+  const { x, y, width, value } = props;
+  const radius = 10;
+
+  return (
+    <text x={x + width / 2} y={y - radius} fill="hsl(var(--foreground))" textAnchor="middle" dominantBaseline="middle" className="text-xs font-medium">
+      {`${value}%`}
+    </text>
+  );
+};
+
 export function SimilarityChart({ data }: SimilarityChartProps) {
   // Determine the score keys dynamically from the first data item.
   // We assume all items in the data array have the same structure.
@@ -29,7 +40,7 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
         <BarChart
           data={data}
           margin={{
-            top: 5,
+            top: 20, // Increased top margin for labels
             right: 30,
             left: 20,
             bottom: 120, // Increased bottom margin for rotated labels
@@ -43,14 +54,17 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
             interval={0} 
             height={100} // Allocate more space for labels
             style={{ fontSize: '12px' }} 
+            tick={{ fill: 'hsl(var(--foreground))' }}
            />
-          <YAxis />
+          <YAxis tick={{ fill: 'hsl(var(--foreground))' }} domain={[0, 100]}/>
           <Tooltip
             contentStyle={{
               background: 'hsl(var(--card))',
               borderColor: 'hsl(var(--border))',
               borderRadius: 'var(--radius)',
+              color: 'hsl(var(--foreground))'
             }}
+            cursor={{fill: 'hsl(var(--muted))'}}
           />
           <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '16px' }}/>
           
@@ -61,7 +75,9 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
               fill={barColors[index % barColors.length]} // Cycle through colors
               name={key} // The legend will use this name
               maxBarSize={30}
-            />
+            >
+              <LabelList dataKey={key} content={<CustomizedLabel />} />
+            </Bar>
           ))}
 
         </BarChart>
