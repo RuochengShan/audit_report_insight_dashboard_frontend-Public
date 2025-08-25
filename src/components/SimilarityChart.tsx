@@ -65,6 +65,7 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
               color: 'hsl(var(--foreground))'
             }}
             cursor={{fill: 'hsl(var(--muted))'}}
+            formatter={(value: number) => `${value}%`}
           />
           <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '16px' }}/>
           
