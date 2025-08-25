@@ -60,19 +60,19 @@ export const AnalysisReport: React.FC<AnalysisReportProps> = ({ results }) => {
               <AccordionTrigger className="font-headline text-lg hover:no-underline">{result.chapter}</AccordionTrigger>
               <AccordionContent className="p-2">
                 <AnalysisDetailCard 
-                  title="Changes Made" 
+                  title="Changes Made as a result of QA Review"
                   points={result.changes} 
                   icon={Pencil}
                   iconColorClass="text-blue-500"
                 />
                 <AnalysisDetailCard 
-                  title="Deleted Information" 
+                  title="Deleted Information as a result of QA Review"
                   points={result.deletions} 
                   icon={Trash2}
                   iconColorClass="text-red-500"
                 />
                 <AnalysisDetailCard 
-                  title="New Added Information" 
+                  title="New Added Information as a result of QA Review"
                   points={result.additions} 
                   icon={PlusCircle}
                   iconColorClass="text-green-500"
