@@ -7,7 +7,7 @@ import type { AnalysisResult } from '@/components/AnalysisReport';
 
 
 export interface SimilarityAnalysisResponse {
-  chartData: { name: string; score: number }[];
+  chartData: Array<Record<string, string | number>>;
   analysisReport: AnalysisResult[];
   clientFileContent: string;
   qaFileContent: string;
@@ -175,7 +175,7 @@ export async function analyzeSimilarityAction(formData: FormData): Promise<Simil
     const data: SimilarityAnalysisResponse = await response.json();
     return data;
 
-  } catch (error) {
+  } catch (error)
     console.error("Error analyzing similarity:", error);
     if (error instanceof Error && error.cause) {
        const nodeError = error.cause as NodeJS.ErrnoException;
