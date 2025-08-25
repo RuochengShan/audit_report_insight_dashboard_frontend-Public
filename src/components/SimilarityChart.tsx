@@ -81,7 +81,7 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
             </Bar>
           ))}
 
-          <ReferenceLine y={95} label={{ value: "Attention (95%)", position: 'left', fill: 'hsl(var(--foreground))', fontSize: 12, dx: -10 }} stroke="hsl(var(--destructive))" strokeDasharray="3 3" />
+          <ReferenceLine y={95} stroke="hsl(var(--destructive))" strokeDasharray="3 3" />
 
         </BarChart>
       </ResponsiveContainer>
