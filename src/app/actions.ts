@@ -175,7 +175,7 @@ export async function analyzeSimilarityAction(formData: FormData): Promise<Simil
     const data: SimilarityAnalysisResponse = await response.json();
     return data;
 
-  } catch (error)
+  } catch (error) {
     console.error("Error analyzing similarity:", error);
     if (error instanceof Error && error.cause) {
        const nodeError = error.cause as NodeJS.ErrnoException;
