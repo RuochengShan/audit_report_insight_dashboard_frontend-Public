@@ -8,7 +8,6 @@ interface SimilarityChartProps {
   data: Array<Record<string, string | number>>;
 }
 
-// A palette of visually distinct colors for the chart bars
 const barColors = [
   "hsl(var(--primary))",
   "hsl(var(--accent))",
@@ -30,9 +29,26 @@ const CustomizedLabel = (props: any) => {
   );
 };
 
+const CustomizedLegend = (props: any) => {
+  const { payload } = props;
+  return (
+    <div className="flex justify-center items-center gap-4 mt-4 text-sm">
+      {payload.map((entry: any, index: number) => (
+        <div key={`item-${index}`} className="flex items-center gap-2">
+          <div style={{ width: 12, height: 12, backgroundColor: entry.color }} />
+          <span>{entry.value}</span>
+        </div>
+      ))}
+      <div className="flex items-center gap-2">
+        <div className="w-4 border-b-2 border-dashed border-destructive" />
+        <span>Attention Threshold (95%)</span>
+      </div>
+    </div>
+  );
+};
+
+
 export function SimilarityChart({ data }: SimilarityChartProps) {
-  // Determine the score keys dynamically from the first data item.
-  // We assume all items in the data array have the same structure.
   const scoreKeys = data.length > 0 ? Object.keys(data[0]).filter(key => key !== 'name') : [];
 
   return (
@@ -40,19 +56,19 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
         <BarChart
           data={data}
           margin={{
-            top: 20, // Increased top margin for labels
+            top: 20,
             right: 30,
             left: 20,
-            bottom: 120, // Increased bottom margin for rotated labels
+            bottom: 120,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             dataKey="name" 
-            angle={-60} // Rotate labels to prevent overlap
+            angle={-60}
             textAnchor="end" 
             interval={0} 
-            height={100} // Allocate more space for labels
+            height={100}
             style={{ fontSize: '12px' }} 
             tick={{ fill: 'hsl(var(--foreground))' }}
            />
@@ -67,21 +83,21 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
             cursor={{fill: 'hsl(var(--muted))'}}
             formatter={(value: number) => `${value}%`}
           />
-          <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '16px' }}/>
+          <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '16px' }} content={<CustomizedLegend />} />
           
           {scoreKeys.map((key, index) => (
             <Bar 
               key={key} 
               dataKey={key} 
-              fill={barColors[index % barColors.length]} // Cycle through colors
-              name={key} // The legend will use this name
+              fill={barColors[index % barColors.length]}
+              name={key}
               maxBarSize={30}
             >
               <LabelList dataKey={key} content={<CustomizedLabel />} />
             </Bar>
           ))}
 
-          <ReferenceLine y={95} stroke="hsl(var(--destructive))" strokeDasharray="3 3" />
+          <ReferenceLine y={95} stroke="hsl(var(--destructive))" strokeDasharray="3 3" ifOverflow="visible" />
 
         </BarChart>
       </ResponsiveContainer>
