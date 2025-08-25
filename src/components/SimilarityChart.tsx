@@ -5,7 +5,11 @@ import * as React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface SimilarityChartProps {
-  data: { name: string; score: number }[];
+  data: { 
+    name: string; 
+    clientScore: number;
+    qaScore: number; 
+  }[];
 }
 
 export function SimilarityChart({ data }: SimilarityChartProps) {
@@ -31,7 +35,8 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
             }}
           />
           <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '16px' }}/>
-          <Bar dataKey="score" fill="hsl(var(--primary))" name="Similarity Score (%)" maxBarSize={60} />
+          <Bar dataKey="clientScore" fill="hsl(var(--primary))" name="Client Version Score (%)" maxBarSize={30} />
+          <Bar dataKey="qaScore" fill="hsl(var(--accent))" name="QA Version Score (%)" maxBarSize={30} />
         </BarChart>
       </ResponsiveContainer>
   );
