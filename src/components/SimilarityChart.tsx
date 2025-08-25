@@ -69,8 +69,6 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
           />
           <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '16px' }}/>
           
-          <ReferenceLine y={95} label={{ value: "Attention Threshold (95%)", position: 'insideTopLeft', fill: 'hsl(var(--foreground))', fontSize: 12 }} stroke="hsl(var(--destructive))" strokeDasharray="3 3" />
-          
           {scoreKeys.map((key, index) => (
             <Bar 
               key={key} 
@@ -82,6 +80,8 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
               <LabelList dataKey={key} content={<CustomizedLabel />} />
             </Bar>
           ))}
+
+          <ReferenceLine y={95} label={{ value: "Attention (95%)", position: 'left', fill: 'hsl(var(--foreground))', fontSize: 12, dx: -10 }} stroke="hsl(var(--destructive))" strokeDasharray="3 3" />
 
         </BarChart>
       </ResponsiveContainer>
