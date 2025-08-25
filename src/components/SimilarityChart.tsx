@@ -2,7 +2,7 @@
 'use client';
 
 import * as React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList, ReferenceLine } from 'recharts';
 
 interface SimilarityChartProps {
   data: Array<Record<string, string | number>>;
@@ -68,6 +68,8 @@ export function SimilarityChart({ data }: SimilarityChartProps) {
             formatter={(value: number) => `${value}%`}
           />
           <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '16px' }}/>
+          
+          <ReferenceLine y={95} label={{ value: "Attention Threshold (95%)", position: 'insideTopLeft', fill: 'hsl(var(--foreground))', fontSize: 12 }} stroke="hsl(var(--destructive))" strokeDasharray="3 3" />
           
           {scoreKeys.map((key, index) => (
             <Bar 
