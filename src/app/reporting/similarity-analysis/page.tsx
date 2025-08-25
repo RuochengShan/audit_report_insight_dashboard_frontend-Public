@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { UploadCloud, FileSearch2, Loader2, AlertTriangle } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { UploadCloud, FileSearch2, Loader2, AlertTriangle, Info } from 'lucide-react';
 import { SimilarityChart } from '@/components/SimilarityChart';
 import { AnalysisReport, type AnalysisResult } from '@/components/AnalysisReport';
 import { AiChatInterface } from '@/components/AiChatInterface';
@@ -136,9 +137,31 @@ export default function SimilarityAnalysisPage() {
         <div className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="font-headline text-2xl">Similarity Scores</CardTitle>
-                <CardDescription>Comparison of similarity metrics between the two documents.</CardDescription>
+              <CardHeader className="flex flex-row items-start justify-between">
+                <div>
+                  <CardTitle className="font-headline text-2xl">Similarity Scores</CardTitle>
+                  <CardDescription>Comparison of similarity metrics between the two documents.</CardDescription>
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
+                      <Info className="h-5 w-5" />
+                      <span className="sr-only">Information about scores</span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 text-sm" align="end">
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <p>
+                          <strong className="font-semibold">Cosine Similarity:</strong> Compares two texts by looking at how often words appear in each, focusing on whether the balance of words is similar.
+                        </p>
+                         <p>
+                          <strong className="font-semibold">Jaccard Index:</strong> Compares two texts by checking how many words they share out of all the different words they use.
+                        </p>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </CardHeader>
               <CardContent>
                 <div className="h-[500px] w-full">
