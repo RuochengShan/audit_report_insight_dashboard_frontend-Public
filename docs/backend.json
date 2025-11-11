@@ -1,0 +1,359 @@
+{
+  "entities": {
+    "AuditReport": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AuditReport",
+      "type": "object",
+      "description": "Represents an audit report document.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the audit report."
+        },
+        "filename": {
+          "type": "string",
+          "description": "Name of the audit report file."
+        },
+        "uploadDate": {
+          "type": "string",
+          "description": "Date and time when the audit report was uploaded.",
+          "format": "date-time"
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Reference to the Project this audit report belongs to. (Relationship: Project 1:N AuditReport)"
+        },
+        "content": {
+          "type": "string",
+          "description": "Content of the audit report. This might be a URL or a path to stored content."
+        }
+      },
+      "required": [
+        "id",
+        "filename",
+        "uploadDate",
+        "projectId",
+        "content"
+      ]
+    },
+    "Project": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Project",
+      "type": "object",
+      "description": "Represents an ongoing audit project.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the project."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the project."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the project."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Start date of the project.",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "End date of the project.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "startDate",
+        "endDate"
+      ]
+    },
+    "ReportSection": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ReportSection",
+      "type": "object",
+      "description": "Represents a section within an audit report.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the report section."
+        },
+        "auditReportId": {
+          "type": "string",
+          "description": "Reference to the AuditReport this section belongs to. (Relationship: AuditReport 1:N ReportSection)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the section."
+        },
+        "content": {
+          "type": "string",
+          "description": "Content of the section."
+        },
+        "completeness": {
+          "type": "number",
+          "description": "Level of completeness of the section (0-100).",
+          "format": "number"
+        }
+      },
+      "required": [
+        "id",
+        "auditReportId",
+        "title",
+        "content",
+        "completeness"
+      ]
+    },
+    "MissingTopic": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MissingTopic",
+      "type": "object",
+      "description": "Represents a missing topic within a report section.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the missing topic."
+        },
+        "reportSectionId": {
+          "type": "string",
+          "description": "Reference to the ReportSection this missing topic relates to. (Relationship: ReportSection 1:N MissingTopic)"
+        },
+        "topic": {
+          "type": "string",
+          "description": "The missing topic."
+        }
+      },
+      "required": [
+        "id",
+        "reportSectionId",
+        "topic"
+      ]
+    },
+    "InsightFeedback": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "InsightFeedback",
+      "type": "object",
+      "description": "Represents AI-generated insights and user feedback for a report section.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the insight feedback."
+        },
+        "reportSectionId": {
+          "type": "string",
+          "description": "Reference to the ReportSection this feedback is for. (Relationship: ReportSection 1:N InsightFeedback)"
+        },
+        "insight": {
+          "type": "string",
+          "description": "AI-generated insight for the section."
+        },
+        "feedback": {
+          "type": "string",
+          "description": "User feedback provided for the section."
+        }
+      },
+      "required": [
+        "id",
+        "reportSectionId",
+        "insight",
+        "feedback"
+      ]
+    },
+    "WindowsLogin": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WindowsLogin",
+      "type": "object",
+      "description": "Representing user login information authenticated by windows. Note: This data model will not store or handle passwords.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Windows login."
+        },
+        "username": {
+          "type": "string",
+          "description": "Username or account name used for Windows login."
+        },
+        "domain": {
+          "type": "string",
+          "description": "The Windows domain the user belongs to, if applicable."
+        },
+        "lastLogin": {
+          "type": "string",
+          "description": "Last login timestamp.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "username"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "microsoft.com"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}/projects/{projectId}",
+        "definition": {
+          "entityName": "Project",
+          "schema": {
+            "$ref": "#/backend/entities/Project"
+          },
+          "description": "Stores projects owned by a specific user.  Authorization is based on path-based ownership.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user who owns the project."
+            },
+            {
+              "name": "projectId",
+              "description": "The ID of the project."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/auditReports/{auditReportId}",
+        "definition": {
+          "entityName": "AuditReport",
+          "schema": {
+            "$ref": "#/backend/entities/AuditReport"
+          },
+          "description": "Stores audit reports associated with a specific project and owned by a specific user. Authorization is based on path-based ownership.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user who owns the project and associated reports."
+            },
+            {
+              "name": "projectId",
+              "description": "The ID of the project to which the report belongs."
+            },
+            {
+              "name": "auditReportId",
+              "description": "The ID of the audit report."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/auditReports/{auditReportId}/reportSections/{reportSectionId}",
+        "definition": {
+          "entityName": "ReportSection",
+          "schema": {
+            "$ref": "#/backend/entities/ReportSection"
+          },
+          "description": "Stores sections of an audit report. Authorization is based on path-based ownership from the parent 'AuditReport' document.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user who owns the project and associated reports."
+            },
+            {
+              "name": "projectId",
+              "description": "The ID of the project to which the report belongs."
+            },
+            {
+              "name": "auditReportId",
+              "description": "The ID of the audit report."
+            },
+            {
+              "name": "reportSectionId",
+              "description": "The ID of the report section."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/auditReports/{auditReportId}/reportSections/{reportSectionId}/missingTopics/{missingTopicId}",
+        "definition": {
+          "entityName": "MissingTopic",
+          "schema": {
+            "$ref": "#/backend/entities/MissingTopic"
+          },
+          "description": "Stores missing topics within a report section.  Authorization is based on path-based ownership from the parent 'ReportSection' document.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user who owns the project and associated reports."
+            },
+            {
+              "name": "projectId",
+              "description": "The ID of the project to which the report belongs."
+            },
+            {
+              "name": "auditReportId",
+              "description": "The ID of the audit report."
+            },
+            {
+              "name": "reportSectionId",
+              "description": "The ID of the report section."
+            },
+            {
+              "name": "missingTopicId",
+              "description": "The ID of the missing topic."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/auditReports/{auditReportId}/reportSections/{reportSectionId}/insightFeedbacks/{insightFeedbackId}",
+        "definition": {
+          "entityName": "InsightFeedback",
+          "schema": {
+            "$ref": "#/backend/entities/InsightFeedback"
+          },
+          "description": "Stores AI-generated insights and user feedback for a report section. Authorization is based on path-based ownership from the parent 'ReportSection' document.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user who owns the project and associated reports."
+            },
+            {
+              "name": "projectId",
+              "description": "The ID of the project to which the report belongs."
+            },
+            {
+              "name": "auditReportId",
+              "description": "The ID of the audit report."
+            },
+            {
+              "name": "reportSectionId",
+              "description": "The ID of the report section."
+            },
+            {
+              "name": "insightFeedbackId",
+              "description": "The ID of the insight feedback."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/windowsLogins/{userId}",
+        "definition": {
+          "entityName": "WindowsLogin",
+          "schema": {
+            "$ref": "#/backend/entities/WindowsLogin"
+          },
+          "description": "Stores Windows login information for a user. Authorization is based on path-based ownership: only the user with the matching UID can access their login information.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support the 'AuditWise Dashboard' application, focusing on audit report analysis and insight generation. The structure leverages path-based ownership and denormalization to ensure authorization independence and facilitate secure and efficient data access. Specifically, project and audit report data are organized to allow secure listing of projects and associated reports. The inclusion of `WindowsLogin` collection supports the authentication strategy.\n\n*   **Authorization Independence**: Achieved by leveraging the hierarchical structure `/users/{userId}/projects/{projectId}/auditReports/{auditReportId}`, security rules can be written to validate that the `request.auth.uid` matches the `{userId}` and can access the data.\n\n*   **QAPs Support**: The structure enables secure `list` operations by segregating data based on ownership and project association. List operations will be limited to reports within a specific project, and project access is limited to the authenticated user. The `/windowsLogins/{userId}` collection segregates windows login information per user, and is readable by each user."
+  }
+}
