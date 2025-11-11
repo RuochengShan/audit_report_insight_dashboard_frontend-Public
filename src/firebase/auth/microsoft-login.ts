@@ -2,14 +2,14 @@
 
 import {
   Auth,
-  signInWithPopup,
+  signInWithRedirect,
   OAuthProvider,
 } from 'firebase/auth';
 
 export function signInWithMicrosoft(authInstance: Auth): void {
   const provider = new OAuthProvider('microsoft.com');
   // You can add scopes here if needed, e.g., provider.addScope('mail.read');
-  signInWithPopup(authInstance, provider)
+  signInWithRedirect(authInstance, provider)
     .catch((error) => {
       // Handle Errors here.
       console.error("Microsoft Sign-In Error:", error);
