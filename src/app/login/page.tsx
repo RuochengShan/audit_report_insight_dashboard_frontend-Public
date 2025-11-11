@@ -14,15 +14,20 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
+    // If the user is already logged in, redirect them to the home page.
     if (!isUserLoading && user) {
       router.push('/');
     }
   }, [user, isUserLoading, router]);
 
   const handleLogin = () => {
-    signInWithMicrosoft(auth);
+    if (auth) {
+      signInWithMicrosoft(auth);
+    }
   };
 
+  // While checking auth state or if user is logged in, show a loader.
+  // This prevents the login button from flashing before redirecting.
   if (isUserLoading || user) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -31,6 +36,7 @@ export default function LoginPage() {
     );
   }
 
+  // Only show the login card if the user is not logged in and auth state is determined.
   return (
     <div className="flex justify-center items-center h-screen bg-background">
       <Card className="w-full max-w-sm shadow-2xl">
@@ -41,10 +47,10 @@ export default function LoginPage() {
         <CardContent>
           <Button onClick={handleLogin} className="w-full" variant="outline">
             <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21 4H8V8H21V4Z" fill="#F25022"/>
-                <path d="M21 9H8V13H21V9Z" fill="#7FBA00"/>
-                <path d="M7 4H3V8H7V4Z" fill="#00A4EF"/>
-                <path d="M7 9H3V13H7V9Z" fill="#FFB900"/>
+                <path d="M11.5 4H21V12.5H11.5V4Z" fill="#F25022"/>
+                <path d="M2 4H10.5V12.5H2V4Z" fill="#7FBA00"/>
+                <path d="M11.5 13.5H21V22H11.5V13.5Z" fill="#00A4EF"/>
+                <path d="M2 13.5H10.5V22H2V13.5Z" fill="#FFB900"/>
             </svg>
             Sign in with Microsoft
           </Button>
